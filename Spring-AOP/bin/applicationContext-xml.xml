@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+<!-- 配置bean -->
+<!-- 用到的类可以与切面不在一个包里 -->
+<bean id="category" class="com.spring.aop.Category" >
+<property name="name2" value="cate" />
+</bean>
+<bean id="product" class="com.spring.aop.Product" >
+<property name="name" value="pro1" />
+<property name="category" ref="category" />
+</bean>
+<bean id="productservice" class="com.spring.aop.basedxml.ProductService">
+</bean>
+<!-- 配置切面的bean -->
+<bean id="loggerAspect" class="com.spring.aop.basedxml.LoggingAspect"></bean>
+<!-- 配置AOP -->
+<aop:config>
+<!-- 配置切点表达式 -->
+<aop:pointcut expression="execution(* com.spring.aop.basedxml.ProductService.*(..))" id="loggerCutPoint"/>
+<!-- 配置切面 -->
+<aop:aspect id="logAspect" ref="loggerAspect">
+<aop:around method="log" pointcut-ref="loggerCutPoint"/>
+</aop:aspect>
+</aop:config>
+
+
+
+</beans>
